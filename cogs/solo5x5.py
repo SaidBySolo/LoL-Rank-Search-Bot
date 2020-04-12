@@ -2,14 +2,12 @@ import discord
 from discord.ext import commands
 from riotwatcher import LolWatcher
 import json
-from .etc.ranks import ranks
-from .etc.botembed import BotEmbed
-
-with open("cogs\etc\Auth.json", "r") as Auth:
-    token = json.load(Auth)
+from cogs.etc.riotdict import RiotDict
+from cogs.etc.botembed import BotEmbed
+from cogs.etc.riot import watcher
 
 region = "kr"
-watcher = LolWatcher(token['RiotAPIToken'])
+watcher = watcher()
 
 class Solo5x5(commands.Cog):
     def __init__(self, bot):
@@ -23,6 +21,7 @@ class Solo5x5(commands.Cog):
         except Exception:
             nouserembed = discord.Embed(title=f"존재하지않는 유저인거같아요",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nouserembed)
+            
         summonername = summonerinfo['name']
         summonerid = summonerinfo['id']
         summonerenid = summonerinfo['accountId']
@@ -37,9 +36,9 @@ class Solo5x5(commands.Cog):
         else:
             summonerranks = summonerranks[0]
 
-        queuetype = ranks.rankdict[summonerranks['queueType']]
-        tear = ranks.rankdict[summonerranks['tier']]
-        rank = ranks.rankdict[summonerranks['rank']]
+        queuetype = RiotDict.riotdict[summonerranks['queueType']]
+        tear = RiotDict.riotdict[summonerranks['tier']]
+        rank = RiotDict.riotdict[summonerranks['rank']]
         point = summonerranks['leaguePoints']
         win = summonerranks['wins']
         loss = summonerranks['losses']
@@ -50,7 +49,7 @@ class Solo5x5(commands.Cog):
         else:
             #embed
             embed = discord.Embed(title=f"{summonername}님의 검색 결과입니다.", description=f"{queuetype}")
-            embed.set_thumbnail(url=ranks.rankdict[f'{tear}img'])
+            embed.set_thumbnail(url=RiotDict.riotdict[f'{tear}img'])
             embed.add_field(name="레벨", value=f"{summonerlv}레벨", inline=True)
             embed.add_field(name=f"{tear} {rank}", value=f"{point}LP", inline=True)
             embed.add_field(name="승/패", value=f"{win}승/{loss}패", inline=True)

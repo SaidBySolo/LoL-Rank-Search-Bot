@@ -1,5 +1,5 @@
-class ranks:
-    rankdict = {
+class RiotDict:
+    riotdict = {
         'RANKED_SOLO_5x5':'솔로랭크',
         'RANKED_FLEX_SR':'자유랭크',
         

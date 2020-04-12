@@ -9,7 +9,8 @@ token = loadjson['DiscordToken']
 
 bot = commands.Bot(command_prefix="$")
 
-extensions = ['cogs.solo5x5',
+extensions = ['cogs.status',
+            'cogs.solo5x5',
             'cogs.flexsr',
             'cogs.events']
 
