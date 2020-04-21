@@ -1,13 +1,9 @@
 import discord
 from discord.ext import commands
-from riotwatcher import LolWatcher
 import json
 from cogs.etc.riotdict import RiotDict
 from cogs.etc.botembed import BotEmbed
-from cogs.etc.riot import watcher
-
-region = "kr"
-watcher = watcher()
+from cogs.etc.rapper import Rapper
 
 class Solo5x5(commands.Cog):
     def __init__(self, bot):
@@ -15,22 +11,24 @@ class Solo5x5(commands.Cog):
 
     @commands.command(name="솔랭")
     async def lolinfo(self, ctx, *, user):
+        rapper = Rapper()
         waitinfo = await ctx.send(embed = BotEmbed.waitinfoembed)
         try:
-            summonerinfo = watcher.summoner.by_name(region, user)
+            summonerinfo = await rapper.summoner(summonername = user)
         except Exception:
             nouserembed = discord.Embed(title=f"존재하지않는 유저인거같아요",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nouserembed)
-            
+
         summonername = summonerinfo['name']
         summonerid = summonerinfo['id']
         summonerenid = summonerinfo['accountId']
         summonerlv = summonerinfo['summonerLevel']
 
-        summonerranks = watcher.league.by_summoner(region, summonerid)
+        summonerranks = await rapper.league(summonerid = summonerid)
 
         if not summonerranks:
-            nsrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")
+            nrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")
+            await waitinfo.edit(embed=nrembed)
         elif len(summonerranks) == 2:
             summonerranks = summonerranks[0]
         else:
@@ -55,7 +53,6 @@ class Solo5x5(commands.Cog):
             embed.add_field(name="승/패", value=f"{win}승/{loss}패", inline=True)
             embed.add_field(name="승률", value=f"{round(win/(win+loss)*100, 2)}%",inline=True)
             await waitinfo.edit(embed=embed)
-            
 
 def setup(bot):
     bot.add_cog(Solo5x5(bot))

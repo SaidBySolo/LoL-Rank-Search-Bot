@@ -1,23 +1,20 @@
 import discord
 from discord.ext import commands
-from riotwatcher import LolWatcher
 import json
 from cogs.etc.riotdict import RiotDict
 from cogs.etc.botembed import BotEmbed
-from cogs.etc.riot import watcher
+from cogs.etc.rapper import Rapper
 
-region = "kr"
-watcher = watcher()
-
-class FlexSR(commands.Cog):
+class Solo5x5(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name="자랭")
     async def lolinfo(self, ctx, *, user):
+        rapper = Rapper()
         waitinfo = await ctx.send(embed = BotEmbed.waitinfoembed)
         try:
-            summonerinfo = watcher.summoner.by_name(region, user)
+            summonerinfo = await rapper.summoner(summonername = user)
         except Exception:
             nouserembed = discord.Embed(title=f"존재하지않는 유저인거같아요",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nouserembed)
@@ -27,10 +24,11 @@ class FlexSR(commands.Cog):
         summonerenid = summonerinfo['accountId']
         summonerlv = summonerinfo['summonerLevel']
 
-        summonerranks = watcher.league.by_summoner(region, summonerid)
+        summonerranks = await rapper.league(summonerid = summonerid)
 
         if not summonerranks:
-            nsrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")
+            nrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")
+            await waitinfo.edit(embed=nrembed)
         elif len(summonerranks) == 2:
             summonerranks = summonerranks[1]
         else:
@@ -42,7 +40,7 @@ class FlexSR(commands.Cog):
         point = summonerranks['leaguePoints']
         win = summonerranks['wins']
         loss = summonerranks['losses']
-
+        
         if queuetype == "솔로랭크":
             nsrembed = discord.Embed(title=f"{summonername}님의 자유랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nsrembed)
@@ -55,7 +53,6 @@ class FlexSR(commands.Cog):
             embed.add_field(name="승/패", value=f"{win}승/{loss}패", inline=True)
             embed.add_field(name="승률", value=f"{round(win/(win+loss)*100, 2)}%",inline=True)
             await waitinfo.edit(embed=embed)
-
+            
 def setup(bot):
-    bot.add_cog(FlexSR(bot))
-        
+    bot.add_cog(Solo5x5(bot))
