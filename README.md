@@ -18,5 +18,5 @@ MIT 라이센스입니다
 
 ## 기여 방법
 
-1. (<https://github.com/SaidBySolo/Hiyobot>)을 포크합니다.
+1. (<https://github.com/SaidBySolo/LoL-Rank-Search-Bot>)을 포크합니다.
 2. 포크하시고 브랜치 나눠서 풀리퀘스트 보내주시면 됩니다.
