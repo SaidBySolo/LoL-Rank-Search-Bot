@@ -2,6 +2,7 @@ class RiotDict:
     riotdict = {
         'RANKED_SOLO_5x5':'솔로랭크',
         'RANKED_FLEX_SR':'자유랭크',
+        'RANKED_TFT':'전략적 팀 전투 랭크',
         
         'IRON':'Iron',
         'BRONZE':'Bronze',

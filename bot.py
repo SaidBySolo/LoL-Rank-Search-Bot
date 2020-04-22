@@ -15,8 +15,8 @@ def load_cogs(bot):
     extensions = ['cogs.status',
                 'cogs.solo5x5',
                 'cogs.flexsr',
+                'cogs.tft',
                 'cogs.events']
-
 
     failed = []
 
