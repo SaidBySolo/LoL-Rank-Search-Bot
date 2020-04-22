@@ -11,7 +11,6 @@ class Solo5x5(commands.Cog):
 
     @commands.command(name="솔랭")
     async def solorank(self, ctx, *, user):
-        wrapper = Wrapper()
         waitinfo = await ctx.send(embed = BotEmbed.waitinfoembed)
         try:
             summonerinfo = await Wrapper.summoner(summonername = user)
