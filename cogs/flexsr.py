@@ -3,18 +3,17 @@ from discord.ext import commands
 import json
 from cogs.etc.riotdict import RiotDict
 from cogs.etc.botembed import BotEmbed
-from cogs.etc.rapper import Rapper
+from cogs.etc.wrapper import Wrapper
 
 class Solo5x5(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name="자랭")
-    async def lolinfo(self, ctx, *, user):
-        rapper = Rapper()
+    async def freerank(self, ctx, *, user):
         waitinfo = await ctx.send(embed = BotEmbed.waitinfoembed)
         try:
-            summonerinfo = await rapper.summoner(summonername = user)
+            summonerinfo = await Wrapper.summoner(summonername = user)
         except Exception:
             nouserembed = discord.Embed(title=f"존재하지않는 유저인거같아요",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nouserembed)
@@ -24,7 +23,7 @@ class Solo5x5(commands.Cog):
         summonerenid = summonerinfo['accountId']
         summonerlv = summonerinfo['summonerLevel']
 
-        summonerranks = await rapper.league(summonerid = summonerid)
+        summonerranks = await Wrapper.league(summonerid = summonerid)
 
         if not summonerranks:
             nrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")

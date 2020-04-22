@@ -5,15 +5,15 @@ from cogs.etc.riotdict import RiotDict
 from cogs.etc.botembed import BotEmbed
 from cogs.etc.wrapper import Wrapper
 
-class Solo5x5(commands.Cog):
+class TFT(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="솔랭")
-    async def solorank(self, ctx, *, user):
+    @commands.command(name="롤체")
+    async def tftrank(self, ctx, user):
         waitinfo = await ctx.send(embed = BotEmbed.waitinfoembed)
         try:
-            summonerinfo = await Wrapper.summoner(summonername = user)
+            summonerinfo = await Wrapper.tftsummoner(summonername = user)
         except Exception:
             nouserembed = discord.Embed(title=f"존재하지않는 유저인거같아요",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nouserembed)
@@ -23,7 +23,7 @@ class Solo5x5(commands.Cog):
         summonerenid = summonerinfo['accountId']
         summonerlv = summonerinfo['summonerLevel']
 
-        summonerranks = await Wrapper.league(summonerid = summonerid)
+        summonerranks = await Wrapper.tftleague(summonerid = summonerid)
 
         if not summonerranks:
             nrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")
@@ -54,4 +54,4 @@ class Solo5x5(commands.Cog):
             await waitinfo.edit(embed=embed)
 
 def setup(bot):
-    bot.add_cog(Solo5x5(bot))
+    bot.add_cog(TFT(bot))
