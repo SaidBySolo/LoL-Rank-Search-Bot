@@ -11,9 +11,10 @@ class Solo5x5(commands.Cog):
 
     @commands.command(name="솔랭")
     async def solorank(self, ctx, *, user):
+        riot = Wrapper(leaguetoken="token paste here")
         waitinfo = await ctx.send(embed = BotEmbed.waitinfoembed)
         try:
-            summonerinfo = await Wrapper.summoner(summonername = user)
+            summonerinfo = await riot.summoner(summonername = user)
         except Exception:
             nouserembed = discord.Embed(title=f"존재하지않는 유저인거같아요",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nouserembed)
@@ -23,7 +24,7 @@ class Solo5x5(commands.Cog):
         summonerenid = summonerinfo['accountId']
         summonerlv = summonerinfo['summonerLevel']
 
-        summonerranks = await Wrapper.league(summonerid = summonerid)
+        summonerranks = await riot.league(summonerid = summonerid)
 
         if not summonerranks:
             nrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")

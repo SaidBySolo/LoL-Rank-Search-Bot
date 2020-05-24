@@ -5,53 +5,36 @@ import asyncio
 MainURL = 'https://kr.api.riotgames.com'
 
 class Wrapper:
+    def __init__(self, leaguetoken = None, tfttoken = None):
+        self.leaguetoken = leaguetoken
+        self.tfttoken = tfttoken
 
-    @classmethod
-    def Token(cls):
-        with open(r"cogs\etc\Auth.json", "r") as Auth:
-            token = json.load(Auth)
-            RiotAPIToken = token['RiotAPIToken']
-            return f'?api_key={RiotAPIToken}'
-    
-    @classmethod
-    def TFTToken(cls):
-        with open(r"cogs\etc\Auth.json", "r") as Auth:
-            token = json.load(Auth)
-            RiotAPIToken = token['RiotTFTAPIToken']
-            return f'?api_key={RiotAPIToken}'
-
-    @classmethod
-    async def fetch(cls, session, url):
+    async def fetch(self, session, url):
         async with session.get(url) as response:
             return await response.json()
     
-    @classmethod
-    async def summoner(cls, summonername):
+    async def summoner(self, summonername):
         async with aiohttp.ClientSession() as session:
-            json = await cls.fetch(session, f'{MainURL}/lol/summoner/v4/summoners/by-name/{summonername}{cls.Token()}')
+            json = await self.fetch(session, f'{MainURL}/lol/summoner/v4/summoners/by-name/{summonername}{self.leaguetoken}')
             return json
 
-    @classmethod
-    async def league(cls, summonerid):
+    async def league(self, summonerid):
         async with aiohttp.ClientSession() as session:
-            json = await cls.fetch(session, f'{MainURL}/lol/league/v4/entries/by-summoner/{summonerid}{cls.Token()}')
+            json = await self.fetch(session, f'{MainURL}/lol/league/v4/entries/by-summoner/{summonerid}{self.leaguetoken}')
             return json
     
-    @classmethod
-    async def tftsummoner(cls, summonername):
+    async def tftsummoner(self, summonername):
         async with aiohttp.ClientSession() as session:
-            json = await cls.fetch(session, f'{MainURL}/tft/summoner/v1/summoners/by-name/{summonername}{cls.TFTToken()}')
+            json = await self.fetch(session, f'{MainURL}/tft/summoner/v1/summoners/by-name/{summonername}{self.tfttoken}')
             return json
 
-    @classmethod
-    async def tftleague(cls, summonerid):
+    async def tftleague(self, summonerid):
         async with aiohttp.ClientSession() as session:
-            json = await cls.fetch(session, f'{MainURL}/tft/league/v1/entries/by-summoner/{summonerid}{cls.TFTToken()}')
+            json = await self.fetch(session, f'{MainURL}/tft/league/v1/entries/by-summoner/{summonerid}{self.tfttoken}')
             return json
 
-    @classmethod
-    async def status(cls):
+    async def status(self):
         async with aiohttp.ClientSession() as session:
-            json = await cls.fetch(session, f'{MainURL}/lol/status/v3/shard-data/{cls.Token()}')
+            json = await self.fetch(session, f'{MainURL}/lol/status/v3/shard-data/{self.leaguetoken}')
             return json
     

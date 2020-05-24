@@ -11,9 +11,10 @@ class TFT(commands.Cog):
 
     @commands.command(name="롤체")
     async def tftrank(self, ctx, user):
+        riot = Wrapper(tfttoken="token paste here")
         waitinfo = await ctx.send(embed = BotEmbed.waitinfoembed)
         try:
-            summonerinfo = await Wrapper.tftsummoner(summonername = user)
+            summonerinfo = await riot.tftsummoner(summonername = user)
         except Exception:
             nouserembed = discord.Embed(title=f"존재하지않는 유저인거같아요",description="확인후 다시시도 해주세요")
             await waitinfo.edit(embed=nouserembed)
@@ -23,7 +24,7 @@ class TFT(commands.Cog):
         summonerenid = summonerinfo['accountId']
         summonerlv = summonerinfo['summonerLevel']
 
-        summonerranks = await Wrapper.tftleague(summonerid = summonerid)
+        summonerranks = await riot.tftleague(summonerid = summonerid)
 
         if not summonerranks:
             nrembed = discord.Embed(title=f"{summonername}님의 랭크 정보가 없는거 같아요...",description="확인후 다시시도 해주세요")

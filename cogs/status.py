@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from riotwatcher import LolWatcher
 import json
 from cogs.etc.botembed import BotEmbed
 from cogs.etc.wrapper import Wrapper
@@ -11,7 +10,8 @@ class Status(commands.Cog):
     
     @commands.command(name="서버상태")
     async def serverstatus(self, ctx):
-        rawstatus = await Wrapper.status()
+        riot = Wrapper(leaguetoken="token paste here")
+        rawstatus = await riot.status()
 
         check_status = []
         name = rawstatus['name']
